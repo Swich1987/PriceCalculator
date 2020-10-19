@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    image: postgres:11.2-alpine
+  web:
+    restart: always
+    build: .
+    command: ./start.sh
+    volumes:
+      - ./src:/calculator_code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
