@@ -1,4 +1,3 @@
-import logging
 from decimal import Decimal
 
 from django.db import migrations
@@ -39,9 +38,7 @@ def add_default_state_taxes(apps, schema_editor):
     State = apps.get_model('api', 'State')
     StateTax = apps.get_model('api', 'StateTax')
 
-    logging.error([state.code for state in State.objects.all()])
     for state_code, state_tax_rate in DEFAULT_STATE_TAXES:
-        logging.error(f'{state_code=}')
         state = State.objects.get(code=state_code)
         StateTax.objects.get_or_create(state=state, tax_rate=state_tax_rate)
 
