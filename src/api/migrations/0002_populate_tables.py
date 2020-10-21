@@ -20,11 +20,11 @@ DEFAULT_STATE_TAXES = [
 ]
 
 DEFAULT_ORDER_DISCOUNTS = [
-    (Decimal(1000), Decimal(3)),
-    (Decimal(5000), Decimal(5)),
-    (Decimal(7000), Decimal(7)),
-    (Decimal(10000), Decimal(10)),
-    (Decimal(50000), Decimal(15))
+    (Decimal(1000), Decimal(0.03)),
+    (Decimal(5000), Decimal(0.05)),
+    (Decimal(7000), Decimal(0.07)),
+    (Decimal(10000), Decimal(0.01)),
+    (Decimal(50000), Decimal(0.015))
 ]
 
 
