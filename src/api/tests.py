@@ -5,7 +5,7 @@ from unittest.mock import patch, MagicMock
 from django.test import SimpleTestCase, RequestFactory
 
 from .views import calc_price_with_discount, NO_KEY_STR, KEY_MUST_BE_DECIMAL, make_error_response, \
-    calc_price_with_state_tax
+    calc_price_with_state_tax, quantize_decimal
 
 MODULE_PATH = 'api.views'
 
@@ -13,8 +13,6 @@ MODULE_PATH = 'api.views'
 class EndpointTestCase(SimpleTestCase):
     @classmethod
     def setUpClass(cls):
-        getcontext().prec = 2
-
         cls.request_factory = RequestFactory()
         return super().setUpClass()
 
@@ -55,21 +53,21 @@ class CalcPriceWithDiscountTestCase(EndpointTestCase):
     def _check_calculation(self, base_price, expect_rate, mock_discount):
         data = {'price': base_price}
 
-        mock_discount_1 = MagicMock(order_price=1000, discount_rate=Decimal(10))
-        mock_discount_2 = MagicMock(order_price=2000, discount_rate=Decimal(20))
+        mock_discount_1 = MagicMock(order_price=Decimal(1000), discount_rate=Decimal(0.01))
+        mock_discount_2 = MagicMock(order_price=Decimal(2000), discount_rate=Decimal(0.02))
         mock_discount.objects.order_by('order_price').all.return_value = [mock_discount_1, mock_discount_2]
 
-        expect_price = Decimal(base_price) * Decimal((1 - expect_rate / 100))
-        expected_json = {'price_with_discount': str(expect_price)}
+        expect_price = Decimal(base_price) * (1 - expect_rate)
+        expected_json = {'price_with_discount': str(quantize_decimal(expect_price))}
 
         self._check_response(data=data, expected_json=expected_json)
 
     @patch(f'{MODULE_PATH}.Discount')
     def test_positive_calculation(self, mock_discount):
-        self._check_calculation(base_price=999, expect_rate=0, mock_discount=mock_discount)
-        self._check_calculation(base_price=1000, expect_rate=10, mock_discount=mock_discount)
-        self._check_calculation(base_price=1999, expect_rate=10, mock_discount=mock_discount)
-        self._check_calculation(base_price=2000, expect_rate=20, mock_discount=mock_discount)
+        self._check_calculation(base_price=Decimal(999), expect_rate=Decimal(0), mock_discount=mock_discount)
+        self._check_calculation(base_price=Decimal(1000), expect_rate=Decimal(0.01), mock_discount=mock_discount)
+        self._check_calculation(base_price=Decimal(1999), expect_rate=Decimal(0.01), mock_discount=mock_discount)
+        self._check_calculation(base_price=Decimal(2000), expect_rate=Decimal(0.02), mock_discount=mock_discount)
 
 
 class CalcPriceWithStateTaxTestCase(EndpointTestCase):
@@ -79,7 +77,7 @@ class CalcPriceWithStateTaxTestCase(EndpointTestCase):
         self._test_no_param_in_request(data={'state_code': 'CA'}, param='price')
 
     def test_no_state_code_in_request(self):
-        self._test_no_param_in_request(data={'price': 1000}, param='state_code')
+        self._test_no_param_in_request(data={'price': Decimal(1000)}, param='state_code')
 
     def test_wrong_price_in_request(self):
         self._test_wrong_decimal_param_in_request(data={'price': 'test', 'state_code': 'CA'}, param='price')
@@ -90,14 +88,14 @@ class CalcPriceWithStateTaxTestCase(EndpointTestCase):
 
         mock_state_tax.objects.get(state_code=state_code).tax_rate = Decimal(expect_rate)
 
-        expect_price = Decimal(base_price) * Decimal((1 - expect_rate / 100))
-        expected_json = {'price_with_state_tax': str(expect_price)}
+        expect_price = Decimal(base_price) * (1 - expect_rate)
+        expected_json = {'price_with_state_tax': str(quantize_decimal(expect_price))}
 
         self._check_response(data=data, expected_json=expected_json)
 
     @patch(f'{MODULE_PATH}.StateTax')
     def test_positive_calculation(self, mock_state_tax):
-        self._check_calculation(base_price=999, expect_rate=0, mock_state_tax=mock_state_tax)
-        self._check_calculation(base_price=1000, expect_rate=10, mock_state_tax=mock_state_tax)
-        self._check_calculation(base_price=1999, expect_rate=10, mock_state_tax=mock_state_tax)
-        self._check_calculation(base_price=2000, expect_rate=20, mock_state_tax=mock_state_tax)
+        self._check_calculation(base_price=Decimal(999), expect_rate=Decimal(0), mock_state_tax=mock_state_tax)
+        self._check_calculation(base_price=Decimal(1000), expect_rate=Decimal(0.01), mock_state_tax=mock_state_tax)
+        self._check_calculation(base_price=Decimal(1999), expect_rate=Decimal(0.01), mock_state_tax=mock_state_tax)
+        self._check_calculation(base_price=Decimal(2000), expect_rate=Decimal(0.02), mock_state_tax=mock_state_tax)
