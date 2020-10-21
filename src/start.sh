@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-echo "WAITING 5 SEC FOR DB TO RUN..."
-sleep 5
 python3 manage.py makemigrations api
 echo "MIGRATION CREATED"
 python3 manage.py migrate
