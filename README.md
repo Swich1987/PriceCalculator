@@ -1,5 +1,5 @@
 # PriceCalculator
-Price calculator to calculate discount and state taxes.
+Price calculator to calculate discount and state tax.
 
 ## Requirements
 - docker 1.10.0+ with docker-compose
@@ -28,7 +28,7 @@ docker-compose down
 Open in any browser localhost:8000
 
 ## Change taxes or discounts
-You can change settings in localhost:8000/admin page, but before you need to create superuser. 
+You can change settings in http://localhost:8000/admin page, but before you need to create superuser. 
 To do this just complete this command after launch:
 ```
 docker exec -it pricecalculator_web_1 python manage.py createsuperuser
