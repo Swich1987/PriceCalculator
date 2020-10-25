@@ -12,6 +12,7 @@ services:
 
   web:
     restart: always
+    user: calculator_user
     build: .
     command: ./start.sh
     volumes:

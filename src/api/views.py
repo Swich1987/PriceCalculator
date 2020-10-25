@@ -45,7 +45,9 @@ def calc_price_with_discount(request):
 
     price_with_discount = base_price * (1 - discount_rate)
 
-    return JsonResponse({"price_with_discount": quantize_price(price_with_discount)})
+    return JsonResponse({
+        "price_with_discount": quantize_price(price_with_discount)
+    })
 
 
 def calc_price_with_state_tax(request):
@@ -62,6 +64,8 @@ def calc_price_with_state_tax(request):
         return make_error_response(KEY_MUST_BE_DECIMAL_ERR.format("price"))
 
     tax_rate = StateTax.objects.get(state__code=state_code).tax_rate
-    price_with_state_tax = base_price * (1 - tax_rate)
+    price_with_state_tax = base_price * (1 + tax_rate)
 
-    return JsonResponse({"price_with_state_tax": quantize_price(price_with_state_tax)})
+    return JsonResponse({
+        "price_with_state_tax": quantize_price(price_with_state_tax)
+    })

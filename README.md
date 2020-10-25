@@ -37,3 +37,14 @@ and enter your login, e-mail and password.
 
 `pricecalculator_web_1` is container name, which can differ on you local machine and is printed after launch, or you
  can use `docker ps` to see it's name.
+ 
+## Run tests
+Simple run with minimal verbose:
+```
+docker exec -it pricecalculator_web_1 python manage.py test
+```
+
+Show name of each test:
+```
+docker exec -it pricecalculator_web_1 python manage.py test -v 2
+```

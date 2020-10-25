@@ -22,8 +22,8 @@ DEFAULT_ORDER_DISCOUNTS = [
     (Decimal(1000), Decimal(0.03)),
     (Decimal(5000), Decimal(0.05)),
     (Decimal(7000), Decimal(0.07)),
-    (Decimal(10000), Decimal(0.01)),
-    (Decimal(50000), Decimal(0.015))
+    (Decimal(10000), Decimal(0.1)),
+    (Decimal(50000), Decimal(0.15))
 ]
 
 
@@ -47,7 +47,8 @@ def add_default_discounts(apps, schema_editor):
     Discount = apps.get_model('api', 'Discount')
 
     for order_price, discount_rate in DEFAULT_ORDER_DISCOUNTS:
-        Discount.objects.get_or_create(order_price=order_price, discount_rate=discount_rate)
+        Discount.objects.get_or_create(order_price=order_price,
+                                       discount_rate=discount_rate)
 
 
 class Migration(migrations.Migration):
