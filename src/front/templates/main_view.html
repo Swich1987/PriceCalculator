@@ -1,3 +1,6 @@
+{% load static %}
+<link rel="stylesheet" href="{% static "style.css" %}">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,25 +18,34 @@
     <input type="number" id="price" name="price" min="1" step="any"> $
     <br><br>
 
-    <input id="calc_total" type="button" value="Calculate total price" onclick="calculateTotal();"/>
+    <button id="calc_total" type="button" onclick="calculateTotal();">
+        Calculate total price
+    </button>
     <label>Total gross price: </label>
-    <b><label id="total_price"></label> $</b>
+    <b><label id="total_price"></label>
+        <label style="width: 10px"> $</label></b>
     <br><br><br><br>
 
-    <input id="calc_price_with_discount" type="button" value="Calculate price with discount"
-           onclick="calculatePriceWithDiscount();"/>
+    <button id="calc_price_with_discount" type="button"
+            onclick="calculatePriceWithDiscount();">
+        Calculate price with discount
+    </button>
     <label>Price with discount: </label>
-    <b><label id="price_with_discount"></label> $</b>
+    <b><label id="price_with_discount"></label>
+        <label style="width: 10px"> $</label></b>
     <br><br><br><br>
 
     <label id="state_code_label">Select State: </label>
     <select id="state_code" name="state_code"></select>
     <br><br>
 
-    <input id="calc_price_with_state_tax" type="button" value="Calculate price with state tax"
-           onclick="calculatePriceWithStateTax();"/>
+    <button id="calc_price_with_state_tax" type="button"
+           onclick="calculatePriceWithStateTax();">
+        Calculate price with state tax
+    </button>
     <label>Price with state tax: </label>
-    <b><label id="price_with_state_tax"></label> $</b>
+    <b><label id="price_with_state_tax"></label>
+        <label style="width: 10px"> $</label></b>
     <br><br>
 
 </form>
@@ -170,7 +182,7 @@ form {
     font-size: 13px;
     display: inline-block;
 	background-color: #37393c;
-    color: white;
+    color: #37393c;
 }
 
 label {
@@ -184,8 +196,8 @@ label {
 
 input,select,textarea {
     display: inline-block;
-    width: 250px;
-    height: 18px;
+    width: 100px;
+    height: 32px;
     padding: 4px;
     line-height: 18px;
     color: #efefef;
@@ -210,7 +222,7 @@ input:focus,select:focus,textarea:focus {
 }
 
 select {
-    width: 200px;
+    width: 50px;
     height: auto;
 }
 
@@ -220,7 +232,7 @@ textarea {
 
 button {
     display: inline-block;
-    width: auto;
+    width: 150px;
     height: auto;
 	background-color: #3d6182;
     background-repeat: repeat-x;
@@ -320,5 +332,9 @@ ul li label {
     width: auto;
     margin: 0 0 0 8px;
 	color: #efefef;
+}
+
+body {
+background-color: #202223;
 }
 </style>
